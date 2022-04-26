@@ -1,0 +1,17 @@
+git init
+
+git remote add origin https://github.com/janithamjc/t3.git
+
+git pull origin janith  << use your branch name here
+
+git add Project_Folder_Name/ File name or *
+
+git commit -m "message"
+
+git push -u origin janith 
+
+
+
+use>git pull< for get update from remote
+use git >branch< to check current branches
+
