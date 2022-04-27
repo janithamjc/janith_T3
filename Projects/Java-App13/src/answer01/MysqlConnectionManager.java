@@ -1,8 +1,10 @@
+package answer01;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class myDriver {
+public class MysqlConnectionManager {
 
 
     private static Connection connection;
@@ -10,10 +12,10 @@ public class myDriver {
    private static final String username = "root";
     private static final String password = "123";
 
-    public myDriver(){
+    public MysqlConnectionManager(){
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

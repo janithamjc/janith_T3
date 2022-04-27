@@ -1,3 +1,5 @@
+package sample01;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,7 +9,7 @@ public class MySqlDemo {
     public static void main(String[] args) {
 
         try {
-            Connection conn = myDriver.getConnection();
+            Connection conn = MysqlConnectionManager.getConnection();
            ResultSet rs =conn.createStatement().
                    executeQuery("select * from users");
             while (rs.next()){
