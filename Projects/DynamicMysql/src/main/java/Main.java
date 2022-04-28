@@ -15,17 +15,21 @@ public class Main {
 
     public static void main(String[] args) {
         Main m = new Main();
-        System.out.println("Insert Your MySQL Query !");
 
         Scanner scanner = new Scanner(System.in);
-        String data = scanner.nextLine().toLowerCase();
-        System.out.println("input>"+data);
-        try {
-            String result = m.processData(data,m.conn.createStatement());
-            System.out.println(result);
-        } catch (SQLException e) {
-            System.out.println("Connection creation Error: "+e);
+
+        while (true) {
+            System.out.println("Insert Your MySQL Query !");
+            String data = scanner.nextLine().toLowerCase();
+            System.out.println("input>" + data);
+            try {
+                String result = m.processData(data, m.conn.createStatement());
+                System.out.println(result);
+            } catch (SQLException e) {
+                System.out.println("Connection creation Error: " + e);
+            }
         }
+
     }
 
     private String processData(String query, Statement statement) {
