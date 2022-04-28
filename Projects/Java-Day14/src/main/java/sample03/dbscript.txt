@@ -1,0 +1,7 @@
+CREATE TABLE `bank` (
+  `accno` varchar(45) DEFAULT NULL,
+  `balance` double DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(45) DEFAULT NULL,
+  UNIQUE KEY `usersname_UNIQUE` (`username`)
+)
