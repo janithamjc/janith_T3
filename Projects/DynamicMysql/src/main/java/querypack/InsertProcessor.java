@@ -10,8 +10,8 @@ public class InsertProcessor implements QueryProcessor{
     public String executeSql(String query) {
         String msg ="";
         try {
-              statement.execute(query);
-               int count =  statement.getUpdateCount();
+           int count =   statement.executeUpdate(query);
+            //   int count =  statement.getUpdateCount();
                 msg ="Record Insert Success.: "+count;
 
         } catch (SQLException e) {

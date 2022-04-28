@@ -12,8 +12,7 @@ public class DeleteProcessor implements QueryProcessor{
     public String executeSql(String query) {
         String msg ="";
         try {
-            statement.execute(query);
-            int count =  statement.getUpdateCount();
+           int count = statement.executeUpdate(query);
             msg ="Record Delete Success.: "+count;
 
         } catch (SQLException e) {
