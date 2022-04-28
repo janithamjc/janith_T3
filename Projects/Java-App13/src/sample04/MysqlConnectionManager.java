@@ -1,4 +1,4 @@
-package answer01;
+package sample04;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
