@@ -10,7 +10,6 @@ public class runner {
 
     public runner() throws SQLException {
         conenction = MysqlConnectionManager.getConnection();
-        conenction.setAutoCommit(false);
     }
     public static void main(String[] args) throws SQLException {
 
