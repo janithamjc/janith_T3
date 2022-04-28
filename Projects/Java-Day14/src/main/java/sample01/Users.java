@@ -1,4 +1,4 @@
-
+package sample01;
 
 public class Users {
 
@@ -55,6 +55,6 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+        return "sample01.Users [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
     }
 }

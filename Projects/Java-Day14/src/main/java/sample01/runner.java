@@ -1,10 +1,12 @@
+package sample01;
+
 import java.sql.*;
 
-public class createTableDemo {
+public class runner {
 
 
 
-    public createTableDemo(){
+    public runner(){
     }
 
     public static void main(String[] args) throws SQLException {
