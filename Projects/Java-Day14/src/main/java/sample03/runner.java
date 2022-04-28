@@ -12,12 +12,9 @@ public class runner {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args) throws SQLException {
-
         runner r = new runner();
 //        r.saveAccount();
         r.updateAcc();
-
-
     }
 
     private void login() {
@@ -89,8 +86,8 @@ public class runner {
                         pst1.setString(2,accNo);
                         pst1.execute();
                         //insert
-                        PreparedStatement pst2 = conenction.prepareStatement("update bank set balance = ? where accno = ? ");
-                        pst2.setDouble(1,balance+amu);
+                        PreparedStatement pst2 = conenction.prepareStatement("update bank set balance = (balance + ?) where accno = ? ");
+                        pst2.setDouble(1, amu);
                         pst2.setString(2,recAccount);
                         pst2.execute();
                         conenction.commit();
