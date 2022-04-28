@@ -7,7 +7,7 @@ import static java.lang.System.*;
 public class runner {
     Connection conenction;
 
-    public runner(){
+    public runner() throws SQLException {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args) throws SQLException {
@@ -69,13 +69,15 @@ public class runner {
         try {
             stm2 = conenction.prepareStatement("insert into user_details" +
                             "(fname,lname,email,username,password) values(?,?,?,?,?)");
+
+            genSQLAndExecute(stm2,u1);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        genSQLAndExecute(stm2,u1);
     }
 
-    private static void genSQLAndExecute(PreparedStatement stmt, Users u1) {
+    private static void genSQLAndExecute(PreparedStatement stmt, Users u1) throws SQLException {
 
         try {
             stmt.setString(1,u1.getFirstName());
