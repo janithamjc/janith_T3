@@ -24,17 +24,12 @@ public class SelectProcessor implements QueryProcessor{
             for (int i = 1; i < columnCount+1; i++) {
                 msg = msg +rsm.getColumnName(i).toUpperCase()+"\t";
             }
-            System.out.println("\n");
-            IntStream.range(0,2*columnCount).forEach(x-> System.out.print("-----"));
-
             while (rs.next()){
                 msg = msg+"\n";
                 for (int i = 1; i < columnCount+1; i++) {
                     msg = msg +rs.getString(i)+"\t";
                 }
             }
-
-
         } catch (SQLException e) {
             msg = "Select Records Failed : "+e.getMessage();
         }
