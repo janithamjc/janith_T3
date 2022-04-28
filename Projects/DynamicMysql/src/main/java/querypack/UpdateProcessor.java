@@ -11,13 +11,14 @@ public class UpdateProcessor  implements QueryProcessor{
 
     @Override
     public String executeSql(String query) {
-        String msg = "";
+        String msg ="";
         try {
-            int i = statement.executeUpdate(query);
-            msg = "Update Record Success !";
+            statement.execute(query);
+            int count =  statement.getUpdateCount();
+            msg ="Update Record Success.: "+count;
+
         } catch (SQLException e) {
-            System.out.println("Insert Record Failed : "+e.getMessage());;
-            msg = "Update Error: "+e.getMessage();
+            msg = "Update Record Failed : "+e.getMessage();
         }
         return msg;
     }

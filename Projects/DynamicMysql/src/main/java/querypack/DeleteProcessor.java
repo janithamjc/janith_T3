@@ -12,14 +12,12 @@ public class DeleteProcessor implements QueryProcessor{
     public String executeSql(String query) {
         String msg ="";
         try {
-            boolean b = statement.execute(query);
-            if (b){
-                msg ="Delete Record Success !";
-            }else{
-                msg ="Delete Record Error !";
-            }
+            statement.execute(query);
+            int count =  statement.getUpdateCount();
+            msg ="Record Delete Success.: "+count;
+
         } catch (SQLException e) {
-            msg = "Delete Record Failed : "+e.getMessage();
+            msg = " Delete Failed : "+e.getMessage();
         }
         return msg;
     }

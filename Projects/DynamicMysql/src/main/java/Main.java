@@ -19,6 +19,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         String data = scanner.nextLine().toLowerCase();
+        System.out.println("input>"+data);
         try {
             String result = m.processData(data,m.conn.createStatement());
             System.out.println(result);

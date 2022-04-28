@@ -1,6 +1,6 @@
 package querypack;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
 public class InsertProcessor implements QueryProcessor{
     Statement statement;
     public InsertProcessor(Statement stmt){
@@ -10,15 +10,13 @@ public class InsertProcessor implements QueryProcessor{
     public String executeSql(String query) {
         String msg ="";
         try {
-            boolean b = statement.execute(query);
-            if (b){
-                msg ="Record Insert Success !";
-            }else{
-                msg ="Record Insert Error !";
-            }
+              statement.execute(query);
+               int count =  statement.getUpdateCount();
+                msg ="Record Insert Success.: "+count;
+
         } catch (SQLException e) {
            msg = "Insert Record Failed : "+e.getMessage();
         }
-        return null;
+        return msg;
     }
 }
