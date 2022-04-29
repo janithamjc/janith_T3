@@ -17,10 +17,8 @@ public class SelectProcessor implements QueryProcessor{
         try {
             System.out.println("select : "+query);
             ResultSet rs = statement.executeQuery(query);
-
              ResultSetMetaData rsm = rs.getMetaData();
              int columnCount = rsm.getColumnCount();
-
             for (int i = 1; i < columnCount+1; i++) {
                 msg = msg +rsm.getColumnName(i).toUpperCase()+"\t";
             }

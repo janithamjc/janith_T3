@@ -1,0 +1,4 @@
+Q1: Use Statement object from batch Updates
+Q2: Use PrepairedStatement for Scrollable and UbdatebleResultSet
+Q3: SelfStudy and use all queries in your java program
+
