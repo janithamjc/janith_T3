@@ -1,24 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans08SelectOr {
+public class Ans17Selectin {
    private Connection conenction;
 
-    public Ans08SelectOr()  {
+    public Ans17Selectin()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans08SelectOr r = new Ans08SelectOr();
+              Ans17Selectin r = new Ans17Selectin();
               r.execute();
     }
     private void execute() {
-        // Or keyword
+        //  in keyword
         try {
            Statement stmt =  conenction.createStatement();
-
-           String String = executeSql(stmt,"select *  from employee_details " +
-                   " where name ='user5' or name = 'user3' ");
+           String String = executeSql(stmt,"select *  from employee_details where empid in (102,104,106)" +
+                   "  ");
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

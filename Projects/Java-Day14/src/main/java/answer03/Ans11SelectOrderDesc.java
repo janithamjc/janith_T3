@@ -1,24 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans08SelectAnd {
+public class Ans11SelectOrderDesc {
    private Connection conenction;
 
-    public Ans08SelectAnd()  {
+    public Ans11SelectOrderDesc()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans08SelectAnd r = new Ans08SelectAnd();
+              Ans11SelectOrderDesc r = new Ans11SelectOrderDesc();
               r.execute();
     }
     private void execute() {
-        // And keyword with operators
+        // Between keyword
         try {
            Statement stmt =  conenction.createStatement();
-
-           String String = executeSql(stmt,"select * department from employee_details " +
-                   " where balance > 1000 and balance <2000 ");
+           String String = executeSql(stmt,"select *  from employee_details " +
+                   " order by  salary desc");
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

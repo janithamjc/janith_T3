@@ -1,23 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans11SelectOrderDesc {
+public class Ans15SelectgroupAvg {
    private Connection conenction;
 
-    public Ans11SelectOrderDesc()  {
+    public Ans15SelectgroupAvg()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans11SelectOrderDesc r = new Ans11SelectOrderDesc();
+              Ans15SelectgroupAvg r = new Ans15SelectgroupAvg();
               r.execute();
     }
     private void execute() {
-        // Between keyword
+        //  Avg keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select *  from employee_details " +
-                   " order by  salary desc");
+           String String = executeSql(stmt,"select name,department,avg(salary) as `Avg Salary`  from employee_details " +
+                   "  ");
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

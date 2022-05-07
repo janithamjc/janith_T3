@@ -1,23 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans06SelectTable {
+public class Ans22StartWith {
    private Connection conenction;
 
-    public Ans06SelectTable()  {
+    public Ans22StartWith()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans06SelectTable r = new Ans06SelectTable();
+              Ans22StartWith r = new Ans22StartWith();
               r.execute();
     }
     private void execute() {
-        // simple select with where
+        //  right join  keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String Query = "";
-            executeSql(stmt,"select * from employee_details");
+           String String = executeSql(stmt,"SELECT * FROM  bank Where username = 'u%'");
+            System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());
         }
@@ -25,7 +25,6 @@ public class Ans06SelectTable {
     public String executeSql(Statement statement, String query) {
         String msg ="";
         try {
-            System.out.println("select : "+query);
             ResultSet rs = statement.executeQuery(query);
             ResultSetMetaData rsm = rs.getMetaData();
             int columnCount = rsm.getColumnCount();

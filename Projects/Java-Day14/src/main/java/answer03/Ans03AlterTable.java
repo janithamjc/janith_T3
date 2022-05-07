@@ -1,26 +1,26 @@
-package sample04;
+package answer03;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Ans02AlterTable {
+public class Ans03AlterTable {
    private Connection conenction;
 
-    public Ans02AlterTable()  {
+    public Ans03AlterTable()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans02AlterTable r = new Ans02AlterTable();
+              Ans03AlterTable r = new Ans03AlterTable();
               r.execute();
     }
 
     private void execute() {
-                        // add new column
+                        // add Primary Column
         try {
             int i = conenction.createStatement().executeUpdate("ALTER TABLE bank  \n" +
-                    "ADD COLUMN account_index INT NULL AFTER password;\n");
+                    "ADD PRIMARY KEY(accno);\n");
             if(i>0){
-                System.out.println("add new Column Successfully !");
+                System.out.println("Primary Key applied Successfully !");
             }else{
                 System.out.println("Error !");
             }

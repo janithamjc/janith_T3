@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- bean definitions here -->
+    <!-- bean definitions here -->
+    <bean id="option0" class="Option">
+        <constructor-arg name="optionId" value="0"/>
+        <constructor-arg name="optionValue" value="Female"/>
+    </bean>
+    <bean id="option1" class="Option">
+    <constructor-arg name="optionId" value="1"/>
+    <constructor-arg name="optionValue" value="Male"/>
+</bean>
+
+    <bean id="option2" class="Option">
+        <constructor-arg name="optionId" value="2"/>
+        <constructor-arg name="optionValue" value="Answer 01"/>
+    </bean>
+    <bean id="option3" class="Option">
+        <constructor-arg name="optionId" value="3"/>
+        <constructor-arg name="optionValue" value="Answer 02"/>
+    </bean>
+    <bean id="option4" class="Option">
+        <constructor-arg name="optionId" value="4"/>
+        <constructor-arg name="optionValue" value="Answer 03"/>
+    </bean>
+    <bean id="option5" class="Option">
+        <constructor-arg name="optionId" value="5"/>
+        <constructor-arg name="optionValue" value="Answer 04"/>
+    </bean>
+
+    <bean id="q1" class="Question">
+        <property name="id" value="1"/>
+        <property name="qName" value="What is your Multi-Threading ? "/>
+        <property name="optionList">
+            <list>
+                <ref bean="option1" />
+                <ref bean="option2" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="q2" class="Question">
+        <property name="id" value="1"/>
+        <property name="qName" value="What is your Encapsulation? "/>
+        <property name="optionList">
+            <list>
+                <ref bean="option1" />
+                <ref bean="option2" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="q3" class="Question">
+        <property name="id" value="1"/>
+        <property name="qName" value="Question Bean 3 Question "/>
+        <property name="optionList">
+            <list>
+                <ref bean="option4" />
+                <ref bean="option5" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="exam" class="OnlineExam">
+        <constructor-arg name="id" value="1" />
+        <constructor-arg name="name" value="Paper Set" />
+        <property name="questions">
+            <map key-type="java.lang.String" value-type="java.util.List">
+                <entry key="Paper 01">
+                <list value-type="Question">
+                    <ref bean="q1" />
+                    <ref bean="q2" />
+                </list></entry>
+
+                <entry key="Paper 02">
+                    <list value-type="Question">
+                        <ref bean="q3" />
+                    </list></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

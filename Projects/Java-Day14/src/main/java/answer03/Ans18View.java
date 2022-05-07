@@ -1,23 +1,30 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans17Selectin {
+public class Ans18View {
    private Connection conenction;
 
-    public Ans17Selectin()  {
+    public Ans18View()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans17Selectin r = new Ans17Selectin();
+              Ans18View r = new Ans18View();
               r.execute();
     }
     private void execute() {
-        //  in keyword
+        //  view keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select *  from employee_details where empid in (102,104,106)" +
+           String String = executeSql(stmt,"CREATE VIEW  worker_sal " +
+                   "AS (SELECT empid,name,salary  FROM test.employee_details where desig = 'Worker')" +
                    "  ");
+
+           //get view table data
+            Statement stm2 =  conenction.createStatement();
+            String String2 = executeSql(stmt,"CREATE VIEW  worker_sal");
+
+
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

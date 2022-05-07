@@ -1,30 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans18View {
+public class Ans13SelectgroupMax {
    private Connection conenction;
 
-    public Ans18View()  {
+    public Ans13SelectgroupMax()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans18View r = new Ans18View();
+              Ans13SelectgroupMax r = new Ans13SelectgroupMax();
               r.execute();
     }
     private void execute() {
-        //  view keyword
+        // group by with max keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"CREATE VIEW  worker_sal " +
-                   "AS (SELECT empid,name,salary  FROM test.employee_details where desig = 'Worker')" +
+           String String = executeSql(stmt,"select name,department,max(salary) as `Max Salary`  from employee_details " +
                    "  ");
-
-           //get view table data
-            Statement stm2 =  conenction.createStatement();
-            String String2 = executeSql(stmt,"CREATE VIEW  worker_sal");
-
-
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

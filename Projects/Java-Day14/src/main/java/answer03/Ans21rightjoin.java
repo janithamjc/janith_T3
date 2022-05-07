@@ -1,22 +1,22 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans12SelectgroupMin {
+public class Ans21rightjoin {
    private Connection conenction;
 
-    public Ans12SelectgroupMin()  {
+    public Ans21rightjoin()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans12SelectgroupMin r = new Ans12SelectgroupMin();
+              Ans21rightjoin r = new Ans21rightjoin();
               r.execute();
     }
     private void execute() {
-        // group by with min keyword
+        //  right join  keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select name,department,min(salary) as `Min Salary`  from employee_details " +
+           String String = executeSql(stmt,"SELECT * from users u right join employee_details e on u.first_name = e.name" +
                    "  ");
             System.out.println(String);
         } catch (SQLException e) {

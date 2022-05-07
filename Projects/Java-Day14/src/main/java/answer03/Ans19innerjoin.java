@@ -1,22 +1,22 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans13SelectgroupMax {
+public class Ans19innerjoin {
    private Connection conenction;
 
-    public Ans13SelectgroupMax()  {
+    public Ans19innerjoin()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans13SelectgroupMax r = new Ans13SelectgroupMax();
+              Ans19innerjoin r = new Ans19innerjoin();
               r.execute();
     }
     private void execute() {
-        // group by with max keyword
+        //  join  keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select name,department,max(salary) as `Max Salary`  from employee_details " +
+           String String = executeSql(stmt,"SELECT * from users u join employee_details e on u.first_name = e.name" +
                    "  ");
             System.out.println(String);
         } catch (SQLException e) {

@@ -1,23 +1,24 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans10SelectOrder {
+public class Ans16Selectgroupsum {
    private Connection conenction;
 
-    public Ans10SelectOrder()  {
+    public Ans16Selectgroupsum()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans10SelectOrder r = new Ans10SelectOrder();
+              Ans16Selectgroupsum r = new Ans16Selectgroupsum();
               r.execute();
     }
     private void execute() {
-        // Between keyword
+        //  Sum keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select *  from employee_details " +
-                   " where salary between '500' and '5000' ");
+           String String = executeSql(stmt,"select name,department,sum(salary) as " +
+                   "`Total Payout`  from employee_details " +
+                   "  ");
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

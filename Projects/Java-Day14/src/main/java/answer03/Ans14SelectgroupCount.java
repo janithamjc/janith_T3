@@ -1,23 +1,23 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans09SelectBetween {
+public class Ans14SelectgroupCount {
    private Connection conenction;
 
-    public Ans09SelectBetween()  {
+    public Ans14SelectgroupCount()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans09SelectBetween r = new Ans09SelectBetween();
+              Ans14SelectgroupCount r = new Ans14SelectgroupCount();
               r.execute();
     }
     private void execute() {
-        // Asc Order
+        // group by with count keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select *  from employee_details " +
-                   " order by  salary  asc ");
+           String String = executeSql(stmt,"select department,count(*) as `User Count`  from employee_details " +
+                   " group by  desig ");
             System.out.println(String);
         } catch (SQLException e) {
             System.out.println("Error : "+e.getMessage());

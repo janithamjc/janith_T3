@@ -1,23 +1,22 @@
-package sample04;
+package answer03;
 
 import java.sql.*;
 
-public class Ans16Selectgroupsum {
+public class Ans12SelectgroupMin {
    private Connection conenction;
 
-    public Ans16Selectgroupsum()  {
+    public Ans12SelectgroupMin()  {
         conenction = MysqlConnectionManager.getConnection();
     }
     public static void main(String[] args)  {
-              Ans16Selectgroupsum r = new Ans16Selectgroupsum();
+              Ans12SelectgroupMin r = new Ans12SelectgroupMin();
               r.execute();
     }
     private void execute() {
-        //  Sum keyword
+        // group by with min keyword
         try {
            Statement stmt =  conenction.createStatement();
-           String String = executeSql(stmt,"select name,department,sum(salary) as " +
-                   "`Total Payout`  from employee_details " +
+           String String = executeSql(stmt,"select name,department,min(salary) as `Min Salary`  from employee_details " +
                    "  ");
             System.out.println(String);
         } catch (SQLException e) {
