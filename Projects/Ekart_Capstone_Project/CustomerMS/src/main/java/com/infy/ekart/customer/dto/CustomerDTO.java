@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class CustomerDTO {
 	
 	@NotNull(message = "{email.absent}")
-	@Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}")
+	@Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z0-9]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}")
 	private String emailId;
 	@Pattern(regexp = "([A-Za-z])+(\\s[A-Za-z]+)*", message = "{customer.invalid.name}")
 	private String name;

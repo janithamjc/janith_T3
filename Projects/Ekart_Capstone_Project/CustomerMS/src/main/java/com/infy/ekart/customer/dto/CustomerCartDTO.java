@@ -35,10 +35,13 @@ public class CustomerCartDTO {
 	public void setCartProducts(Set<CartProductDTO> cartProducts) {
 		this.cartProducts = cartProducts;
 	}
-	
-	
-	
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "CustomerCartDTO{" +
+				"cartId=" + cartId +
+				", customerEmailId='" + customerEmailId + '\'' +
+				'}';
+	}
 }

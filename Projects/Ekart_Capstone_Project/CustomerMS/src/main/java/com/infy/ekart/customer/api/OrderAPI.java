@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,13 @@ public class OrderAPI {
 
 	@Autowired
 	private RestTemplate template;
+	@Value("${url.product-api.product}")
+	private String productApiURL;
+	@Value("${url.customercart-api.customer}")
+	private String customerCartApiURL;
+	@Value("${url.product-api.update}")
+	private String productApiUpdateURL;
+
 
 	// This method will receives order details with customerEmailId , dateOfDelivery
 	// and paymentThrough
@@ -59,10 +67,10 @@ public class OrderAPI {
 	// OrderService
 	@PostMapping(value = "/place-order")
 	public ResponseEntity<String> placeOrder(@Valid @RequestBody OrderDTO order) throws EKartCustomerException {
-		//write your logic here
+
 
 		ResponseEntity<CartProductDTO[]> cartProductDTOsResponse = template.getForEntity(
-				"http://localhost:3335/Ekart/customercart-api/customer/" + order.getCustomerEmailId() + "/products",
+				customerCartApiURL + order.getCustomerEmailId() + "/products",
 				CartProductDTO[].class);
 		// We are calling the Cart API using hard-coded URI
 		// Replace this call with the appropriate MS name
@@ -73,7 +81,7 @@ public class OrderAPI {
 
  		CartProductDTO[] cartProductDTOs = cartProductDTOsResponse.getBody();
 		template.delete(
-				"http://localhost:3335/Ekart/customercart-api/customer/" + order.getCustomerEmailId() + "/products");
+				customerCartApiURL + order.getCustomerEmailId() + "/products");
 		// We are calling the Cart API using hard-coded URI
 		// Replace this call with the appropriate MS name
 		// CartMS is not an upscaled one (available in 1 number) , still load-balanced
@@ -111,21 +119,16 @@ public class OrderAPI {
 			@NotNull(message = "{orderId.absent}") @PathVariable Integer orderId) throws EKartCustomerException {
 		OrderDTO orderDTO = orderService.getOrderDetails(orderId);
 		for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-
 			ResponseEntity<ProductDTO> productResponse = template.getForEntity(
-					"http://localhost:3334/Ekart/product-api/product/" + orderedProductDTO.getProduct().getProductId(),
+					productApiURL + orderedProductDTO.getProduct().getProductId(),
 					ProductDTO.class);
 			// We are calling the Product API using hard-coded URI
 			// Replace this call with the appropriate MS name
 			// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
 			// template to make call to the Product API
-
 			orderedProductDTO.setProduct(productResponse.getBody());
-
 		}
-
 		return new ResponseEntity<>(orderDTO, HttpStatus.OK);
-
 	}
 
 	// Fetch all the orders (List<OrderDTO>) placed by the customer by calling
@@ -147,22 +150,17 @@ public class OrderAPI {
 		List<OrderDTO> orderDTOs = orderService.findOrdersByCustomerEmailId(customerEmailId);
 		for (OrderDTO orderDTO : orderDTOs) {
 			for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-
 				ResponseEntity<ProductDTO> productResponse = template
-						.getForEntity("http://localhost:3334/Ekart/product-api/product/"
+						.getForEntity(productApiURL
 								+ orderedProductDTO.getProduct().getProductId(), ProductDTO.class);
 				// We are calling the Product API using hard-coded URI
 				// Replace this call with the appropriate MS name
 				// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
 				// template to make call to the Product API
-
 				orderedProductDTO.setProduct(productResponse.getBody());
-
 			}
-
 		}
 		return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
-
 	}
 
 	@PutMapping(value = "order/{orderId}/update/order-status")
@@ -172,15 +170,12 @@ public class OrderAPI {
 			orderService.updateOrderStatus(orderId, OrderStatus.CONFIRMED);
 			OrderDTO orderDTO = orderService.getOrderDetails(orderId);
 			for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-
-				template.put("http://localhost:3335/Ekart/product-api/update/"
+				template.put(productApiUpdateURL
 						+ orderedProductDTO.getProduct().getProductId(), orderedProductDTO.getQuantity());
 				// We are calling the Product API using hard-coded URI
 				// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
 				// template to make call to the Product API
-
 			}
-
 		} else {
 			orderService.updateOrderStatus(orderId, OrderStatus.CANCELLED);
 		}
@@ -192,9 +187,7 @@ public class OrderAPI {
 		if (paymentThrough.equalsIgnoreCase("DEBIT_CARD")) {
 			orderService.updatePaymentThrough(orderId, PaymentThrough.DEBIT_CARD);
 		} else {
-
 			orderService.updatePaymentThrough(orderId, PaymentThrough.CREDIT_CARD);
 		}
 	}
-
 }

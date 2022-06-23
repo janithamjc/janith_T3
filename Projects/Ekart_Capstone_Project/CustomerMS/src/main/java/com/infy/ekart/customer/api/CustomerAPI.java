@@ -7,6 +7,7 @@ import com.infy.ekart.customer.dto.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import com.infy.ekart.customer.exception.EKartCustomerException;
 import com.infy.ekart.customer.service.CustomerService;
 
+import java.net.URI;
+
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/customer-api")
@@ -40,6 +43,11 @@ public class CustomerAPI {
 	private Environment environment;
 
 	static Log logger = LogFactory.getLog(CustomerAPI.class);
+
+	@Value("${url.product-api.product}")
+		private String productApiURL;
+	@Value("${url.customercart-api.products}")
+	private String customerCartApiURL;
 
 	@PostMapping(value = "/login")
 	public ResponseEntity<CustomerDTO> authenticateCustomer(@Valid @RequestBody CustomerLoginDTO customerDTO)
@@ -94,24 +102,22 @@ public class CustomerAPI {
 		for (CartProductDTO cartProductDTO : customerCartDTO.getCartProducts()) {
 
 			template.getForEntity(
-					"http://localhost:3334/Ekart/product-api/product/" + cartProductDTO.getProduct().getProductId(),
+					productApiURL + cartProductDTO.getProduct().getProductId(),
 					ProductDTO.class);
 			// We are calling the product API using hard-coded URI
 			// Replace this call with the appropriate MS name
 			// Product API is upscaled (available in 2 numbers). Hence, use load balanced
 			// template to make call to the Product API
-
 		}
 
 		ResponseEntity<String> productAddedToCartMessage = template
-				.postForEntity("http://localhost:3335/Ekart/customercart-api/products", customerCartDTO, String.class);
+				.postForEntity(customerCartApiURL, customerCartDTO, String.class);
 		// We are calling the Cart API using hard-coded URI
 		// Replace this call with the appropriate MS name
 		// CartMS is not an upscaled one (available in 1 number) , still load-balanced
 		// rest template should be used here to make the call
 		// Don't create and autowire a normal rest template because load balanced
 		// template is already in config file
-		System.out.println(productAddedToCartMessage.toString());
 		return productAddedToCartMessage;
 	}
 

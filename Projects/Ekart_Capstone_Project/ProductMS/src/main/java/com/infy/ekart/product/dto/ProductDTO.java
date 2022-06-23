@@ -1,5 +1,8 @@
 package com.infy.ekart.product.dto;
 
+import lombok.ToString;
+
+@ToString
 public class ProductDTO {
 	
 	private Integer productId;

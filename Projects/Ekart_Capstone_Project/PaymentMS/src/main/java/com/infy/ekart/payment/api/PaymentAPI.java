@@ -11,6 +11,7 @@ import com.infy.ekart.payment.service.PaymentCircuitBreakerService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,8 @@ public class PaymentAPI {
 	private RestTemplate template;
 
 	private static final Log logger = LogFactory.getLog(PaymentAPI.class);
+	@Value("${url.customerorder-api.order}")
+	private String customerOrderApiOrderURL;
 
 	@PostMapping(value = "/customer/{customerEmailId:.+}/cards")
 	public ResponseEntity<String> addNewCard(@Valid @RequestBody CardDTO cardDTO,
@@ -122,7 +125,7 @@ public class PaymentAPI {
 
 				try {
 					ResponseEntity<OrderDTO> orderResponse = template.getForEntity(
-							"http://localhost:3336/Ekart/customerorder-api/order/" + transactionDTO.getOrder().getOrderId(),
+							customerOrderApiOrderURL + transactionDTO.getOrder().getOrderId(),
 							OrderDTO.class);
 
 // Update the Transaction details with the obtained Order details in above step,

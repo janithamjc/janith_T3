@@ -1,0 +1,145 @@
+[8:13 AM, 6/21/2022] Janmejaya Padhiary: Product
+ 
+
+US01: Product : http://localhost:3334/Ekart/product-api/products
+
+As a Customer, I should be able to view the available products, so that I can buy the product I want.
+
+Acceptance criteria
+
+Only customers should be provided with this feature
+The product details should be displayed in a tabular format
+Product details include image, product name, description, category, brand, and price
+If the number of products is more than 10, then display the product details in paginated format
+Display proper messages in case of errors or exceptions
+ 
+
+Cart
+
+ US02: Add Item to Cart : http://localhost:3336/Ekart/customer-api/customercarts/add-product
+
+As a customer, I should be able to add the items of my preference to my cart from the product details page. This can help me revisit the items of my preference even after moving out of the product details page. While adding the items to the cart, the quantity can also be mentioned.
+
+Acceptance test criteria
+
+Only customers should be provided with this feature
+Verify if the same product is added again. If so, the item in the cart should be updated with the quantity (existing quantity + the new quantity)
+Display proper messages in case of errors or exceptions
+ 
+
+US03: Modify item
+
+As a customer, I should be able to modify the item quantity in my cart. As well, I should be able to delete an existing item from the cart.
+
+Acceptance test criteria
+
+Check whether the total amount changes when the quantity is updated for an item or an item is removed from the cart
+Display proper messages in case of errors or exceptions
+ 
+
+US04: View Cart
+
+As a customer, I should be able to view my cart by clicking on the cart icon, so that I can get to know the items that I am purchasing.
+
+Acceptance test criteria
+
+Only customers should be provided with this feature
+The items that were added by a customer should be displayed in tabular format in that customer’s cart
+If the number of items exceeds 10, then the item details should be displayed in paginated format
+Verify that the item name, quantity, and price for each item are shown in the cart. Also, check whether the total amount is displayed on the cart page
+Display proper messages in case of errors or exceptions
+ 
+
+Customer
+
+US05-Register
+
+As a customer, I should be able to sign-up for the application, so that I get the benefits of a registered customer.
+
+Acceptance test criteria
+
+Verify that an error message is displayed if all the details are not filled
+Verify that an error message is displayed if the email id is already in use by some other user
+Verify that an error message is displayed if the name contains numbers or special characters
+Password should be a combination of at least an uppercase alphabet, lowercase alphabets, a digit, and a special character. Verify for the same and display an error message if the password entered by the customer is not in the expected format
+Verify that an error message is displayed if the phone number is already in use by some other user
+Verify that a new account is created if all the fields that have been entered by the user are proper. And, the user should be able to login with his/her emailId and password
+ 
+
+US06-Customer-Login
+
+As a user, I should be able to log in, so that I can use the services of Ekart
+
+Acceptance test criteria
+
+Verify that the combination of userId and password being entered by the user is correct
+Display proper messages in case of errors or exceptions
+ 
+
+US07-Place Order
+
+As a customer, I may want to place an order for the product(s) that are available in my cart.
+
+Acceptance test criteria
+
+Only customers should be provided with this feature
+While viewing the cart, the button “Place Order” should be displayed
+On clicking on the button, it should display the payment options like Debit/Credit cards that were added to the application earlier by the customer
+Display proper messages in case of errors or exceptions
+ 
+
+Payment
+
+US-08: Add a new card
+
+As a customer, I want to add my credit/debit card details that will help me make payments while placing orders.
+
+Acceptance test criteria
+
+Only customers should be provided with this feature
+It should allow entering new card details. Details to be entered are
+Card Type: Can be Debit card or Credit card (should be selected from the dropdown)
+Card number: Should be of 16 digits
+CVV: Should be of 3 digits
+Expiry Date: Only month and year should be entered that should be of future
+Name on Card: Only alphabets and spaces are allowed; the length should not be more than 50 characters
+If all the validations are proper, the details should be stored in the database. The CVV should be hashed before storing it in the database
+Display proper messages in case of errors or exceptions
+ 
+
+US-09: Pay for the order
+
+As a customer, I should be able to do payment for my orders so that my orders are delivered.
+
+Only customers should be provided with this feature
+Verify that the registered customer’s credit/debit card details are displayed using the dropdown
+The card details that should be displayed are the Card Type and Card Number(masked eg: 6252 XXXX XXXX 2514), the expiry date(only month and year), and the name on the card
+The customer should be able to select either one of the cards for payment. After selecting, the customer should be able to enter CVV and proceed
+The CVV should be verified through the database for payment
+It should allow entering new card details as well. Details to be entered are
+Card Type: Can be Debit card or Credit card (should be selected from the dropdown)
+Card number: Should be of 16 digits
+CVV: Should be of 3 digits
+Expiry Date: Only month and year should be entered that should be of future.
+Name on Card: Only alphabets and spaces are allowed; the length should not be more than 50 characters
+                Note: The CVV should be hashed before storing it in the database
+
+After the payment method is selected, the order should be placed
+Display proper messages in case of errors or exceptions
+[8:14 AM, 6/21/2022] Janmejaya Padhiary: The application flow of Ekart is as follows. The customer can
+
+1. View products
+
+2. Add products to the cart
+
+3. Place Orders
+
+4. Make Payments
+
+Include the below-given features to make the microservices cloud-native.
+
+Use Consul for centralizing the common configurations
+Register all the microservices with Consul
+Create two instances of "ProductMS" service and invoke the same from the "CustomerMS" service using the Spring cloud load balancer
+Add resiliency to "PaymentMS" using Resilience4j. Open the circuit of "PaymentMS" if continuous 3 CVVs are going wrong in a minute duration. After which, return an appropriate message. Try closing the circuit again after one minute
+Bring Spring Cloud Gateway service in place and make sure that the requests to microservices are forwarded through the gateway

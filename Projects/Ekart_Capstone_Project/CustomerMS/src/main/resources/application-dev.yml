@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: customer-ms
+  datasource:
+    username: root
+    password: 123
+    url: jdbc:mysql://localhost:3306/EKART_CUSTOMER?useSSL=false
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+
+server:
+  servlet:
+    context-path: /Ekart
+  error:
+    whitelabel:
+      enables: false
+  host: 127.0.0.1
+  port: 3336
+
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: info
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+    registerWithEureka: false
+    fetchRegistry: false
+
+url:
+  product-api:
+    product: http://localhost:3334/Ekart/product-api/product/
+    update: http://localhost:3335/Ekart/product-api/update/
+  customercart-api:
+    products: http://localhost:3335/Ekart/customercart-api/products
+    customer: http://localhost:3335/Ekart/customercart-api/customer/
+

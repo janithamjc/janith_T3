@@ -1,0 +1,47 @@
+
+spring:
+  application:
+    name: payment-ms
+  datasource:
+    username: root
+    password: 123
+    url: jdbc:mysql://localhost:3306/EKART_PAYMENT?useSSL=false
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+
+
+server:
+  servlet:
+    context-path: /Ekart
+  error:
+    whitelabel:
+      enables: false
+  host: 127.0.0.1
+  port: 3337
+
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: info
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+    registerWithEureka: false
+    fetchRegistry: false
+
+url:
+  customerorder-api:
+    order: http://localhost:3336/Ekart/customerorder-api/order/

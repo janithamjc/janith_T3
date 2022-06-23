@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,9 @@ public class CustomerCartAPI {
 	@Autowired
 	private RestTemplate template;
 
+	@Value("${url.product-api.product}")
+	private String productApiURL;
+
 	Log logger = LogFactory.getLog(CustomerCartAPI.class);
 
 	@PostMapping(value = "/products")
@@ -62,7 +66,7 @@ public class CustomerCartAPI {
 		for (CartProductDTO cartProductDTO : cartProductDTOs) {
 
 			ProductDTO productDTO = template.getForEntity(
-					"http://localhost:3334/Ekart/product-api/product/" + cartProductDTO.getProduct().getProductId(),
+					productApiURL + cartProductDTO.getProduct().getProductId(),
 					ProductDTO.class).getBody();
 			// We are calling the product API using hard-coded URI
 			// Replace this call with the appropriate MS name
