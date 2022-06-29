@@ -34,8 +34,12 @@ logging:
 
 eureka:
   instance:
-    prefer-ip-address: true
+    hostname: localhost
+#    prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://loclhost:8761/eureka
 
+url:
+  product-api:
+    product: http://localhost:9000/product-ms/Ekart/product-api/product/

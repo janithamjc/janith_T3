@@ -44,4 +44,4 @@ eureka:
 
 url:
   customerorder-api:
-    order: http://localhost:3336/Ekart/customerorder-api/order/
+    order: http://localhost:3336/customer-ms/Ekart/customerorder-api/order/

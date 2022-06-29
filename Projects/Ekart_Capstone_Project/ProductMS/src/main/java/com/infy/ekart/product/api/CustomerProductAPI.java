@@ -33,6 +33,7 @@ public class CustomerProductAPI {
 
 	// Get all the product details by calling getAllProducts() of
 	// CustomerProductService and return the same
+	@GetMapping(value = "/products")
 	public ResponseEntity<List<ProductDTO>> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
 														   @RequestParam(defaultValue = "10") Integer pageSize) throws EKartProductException {
 		return  ResponseEntity.ok().body(customerProductService.getAllProducts(pageNo,pageSize));
