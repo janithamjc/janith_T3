@@ -9,6 +9,8 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +55,9 @@ public class OrderAPI {
 	@Value("${url.product-api.update}")
 	private String productApiUpdateURL;
 
+	@Autowired
+	CircuitBreakerFactory circuitBreakerFactory;
+
 
 	// This method will receives order details with customerEmailId , dateOfDelivery
 	// and paymentThrough
@@ -69,6 +74,7 @@ public class OrderAPI {
 	public ResponseEntity<String> placeOrder(@Valid @RequestBody OrderDTO order) throws EKartCustomerException {
 
 
+
 		ResponseEntity<CartProductDTO[]> cartProductDTOsResponse = template.getForEntity(
 				customerCartApiURL + order.getCustomerEmailId() + "/products",
 				CartProductDTO[].class);
@@ -80,8 +86,18 @@ public class OrderAPI {
 		// template is already in config file
 
  		CartProductDTO[] cartProductDTOs = cartProductDTOsResponse.getBody();
-		template.delete(
-				customerCartApiURL + order.getCustomerEmailId() + "/products");
+//init Circuit Bracker
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("customerCartURLDeleteBracker");
+
+		 circuitBreaker.run(()->{template.delete(
+						 customerCartApiURL + order.getCustomerEmailId() + "/products");
+			 return HttpStatus.ACCEPTED;}
+				 ,throwable -> { return HttpStatus.FAILED_DEPENDENCY;}
+		 );
+//		template.delete(
+//				customerCartApiURL + order.getCustomerEmailId() + "/products");
+
+
 		// We are calling the Cart API using hard-coded URI
 		// Replace this call with the appropriate MS name
 		// CartMS is not an upscaled one (available in 1 number) , still load-balanced
@@ -119,9 +135,12 @@ public class OrderAPI {
 			@NotNull(message = "{orderId.absent}") @PathVariable Integer orderId) throws EKartCustomerException {
 		OrderDTO orderDTO = orderService.getOrderDetails(orderId);
 		for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-			ResponseEntity<ProductDTO> productResponse = template.getForEntity(
-					productApiURL + orderedProductDTO.getProduct().getProductId(),
-					ProductDTO.class);
+			CircuitBreaker circuitBreaker = circuitBreakerFactory.create("orderedProductDTOBracker");
+			ResponseEntity<ProductDTO> productResponse =
+					circuitBreaker.run(()->{
+						return template.getForEntity(productApiURL + orderedProductDTO.getProduct().getProductId(),ProductDTO.class);
+							},
+					throwable -> { return  ResponseEntity.ok(new ProductDTO());});
 			// We are calling the Product API using hard-coded URI
 			// Replace this call with the appropriate MS name
 			// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
@@ -148,11 +167,15 @@ public class OrderAPI {
 			@Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable String customerEmailId)
 			throws EKartCustomerException {
 		List<OrderDTO> orderDTOs = orderService.findOrdersByCustomerEmailId(customerEmailId);
+
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("productApiURLBracker");
 		for (OrderDTO orderDTO : orderDTOs) {
 			for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-				ResponseEntity<ProductDTO> productResponse = template
+				ResponseEntity<ProductDTO> productResponse = circuitBreaker.run(()->{
+					return template
 						.getForEntity(productApiURL
-								+ orderedProductDTO.getProduct().getProductId(), ProductDTO.class);
+								+ orderedProductDTO.getProduct().getProductId(), ProductDTO.class);},
+						throwable -> { return  ResponseEntity.ok(new ProductDTO());});
 				// We are calling the Product API using hard-coded URI
 				// Replace this call with the appropriate MS name
 				// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
@@ -169,9 +192,18 @@ public class OrderAPI {
 		if (transactionStatus.equals("TRANSACTION_SUCCESS")) {
 			orderService.updateOrderStatus(orderId, OrderStatus.CONFIRMED);
 			OrderDTO orderDTO = orderService.getOrderDetails(orderId);
+
+
+			CircuitBreaker circuitBreaker = circuitBreakerFactory.create("productApiUpdateURLBracker");
+
 			for (OrderedProductDTO orderedProductDTO : orderDTO.getOrderedProducts()) {
-				template.put(productApiUpdateURL
+				circuitBreaker.run(()->{
+					  template.put(productApiUpdateURL
 						+ orderedProductDTO.getProduct().getProductId(), orderedProductDTO.getQuantity());
+					  return HttpStatus.OK;},
+						throwable -> {
+
+					return  ResponseEntity.ok();});
 				// We are calling the Product API using hard-coded URI
 				// ProductMS is upscaled (available in 2 numbers). Hence, use load balanced
 				// template to make call to the Product API

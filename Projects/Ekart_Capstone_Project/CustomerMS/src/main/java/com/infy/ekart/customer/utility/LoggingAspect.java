@@ -18,4 +18,5 @@ public class LoggingAspect {
 		 logger.error(exception.getMessage(), exception);
 	}
 
+
 }

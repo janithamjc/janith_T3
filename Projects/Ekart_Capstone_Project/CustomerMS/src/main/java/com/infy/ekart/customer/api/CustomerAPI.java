@@ -8,6 +8,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,10 @@ public class CustomerAPI {
 		private String productApiURL;
 	@Value("${url.customercart-api.products}")
 	private String customerCartApiURL;
+
+	@Autowired
+	CircuitBreakerFactory circuitBreakerFactory;
+
 
 	@PostMapping(value = "/login")
 	public ResponseEntity<CustomerDTO> authenticateCustomer(@Valid @RequestBody CustomerLoginDTO customerDTO)
@@ -98,20 +104,27 @@ public class CustomerAPI {
 			throws EKartCustomerException {
 
 		customerService.getCustomerByEmailId(customerCartDTO.getCustomerEmailId());
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("productApiURLBracker");
 
 		for (CartProductDTO cartProductDTO : customerCartDTO.getCartProducts()) {
 
-			template.getForEntity(
+			ResponseEntity<ProductDTO> productResponse =
+					circuitBreaker.run(()->{
+								return
+										template.getForEntity(
 					productApiURL + cartProductDTO.getProduct().getProductId(),
-					ProductDTO.class);
+					ProductDTO.class);},
+							throwable -> { return  ResponseEntity.ok(new ProductDTO());});
 			// We are calling the product API using hard-coded URI
 			// Replace this call with the appropriate MS name
 			// Product API is upscaled (available in 2 numbers). Hence, use load balanced
 			// template to make call to the Product API
 		}
 
-		ResponseEntity<String> productAddedToCartMessage = template
-				.postForEntity(customerCartApiURL, customerCartDTO, String.class);
+		ResponseEntity<String> productAddedToCartMessage = circuitBreaker.run(()->{
+			return template
+				.postForEntity(customerCartApiURL, customerCartDTO, String.class);},
+				throwable -> { return  ResponseEntity.ok("Error !");});
 		// We are calling the Cart API using hard-coded URI
 		// Replace this call with the appropriate MS name
 		// CartMS is not an upscaled one (available in 1 number) , still load-balanced
